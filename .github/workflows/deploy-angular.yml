@@ -14,6 +14,7 @@ jobs:
       - name: "Configurando o user no git"
         run: |
           echo "Configurando o git user.name"
+          quebrando o job do workflow na pratica
   construir:
     runs-on: ubuntu-24.04
     needs:
