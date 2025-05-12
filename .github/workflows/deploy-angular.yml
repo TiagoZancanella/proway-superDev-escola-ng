@@ -11,7 +11,7 @@ jobs:
         # essa é a action que permite ter acesso ao código durante a execução do job.
         uses: actions/checkout@v4
         with:
-          ref: main # ref é o input que diz qual será o nome da branch que utilizaremos.
+          ref: deploy # ref é o input que diz qual será o nome da branch que utilizaremos.
       - name: "Listar arquivos e pastas"
         run: |
           ls -la
