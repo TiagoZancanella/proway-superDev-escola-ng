@@ -1,0 +1,16 @@
+name: "Workflow Exemplo"
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  configurar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Configurar o git na pipeline"
+        run: |
+         echo "Configurando o giti na pipeline"
+         echo "Configurando o giti na sucesso"
+      - name: "Configurando o user no git"
+        run: |
+          echo "Configurando o git user.name"
