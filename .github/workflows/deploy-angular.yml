@@ -37,7 +37,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: deploy # ref é o input que diz qual será o nome da branch que utilizaremos.
-      - name: "Instalar as dependencias"
-        run: echo 'Instalando as dependencias'
-
+      - name: Download do artefato
+        uses: actions/download-artifact@
+        with:
+          name: build-artifact
+          path: ./dist
+      - name: "Configurar Git"
+        run: |
+          git config --global user.name "Tiago Bazzi Zancanella"
+          git config --global user.email "tiagozancanella17@gmail.com"
+          npm install --global angular-cli-ghpages
+      - name: Deploy to GitHub Pages
+        run: npx angular-cli-ghpages --dir=dist/escola-ng/browser --no-silent
+        env:
+          cli: true
+          GH_TOKEN: ${{secrets.TOKEN_TO_DEPLOY}}
         
