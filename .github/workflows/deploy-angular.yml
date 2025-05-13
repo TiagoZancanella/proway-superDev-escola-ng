@@ -1,16 +1,57 @@
-name: "Workflow Exemplo"
+name: "Deploy Angular PROD"
 
-on: 
-  workflow_dispatch:
+on:
+  push:
+    branches:
+    - main
+  # workflow_dispatch:
 
 jobs:
-  configurar:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: "Configurar o git na pipeline"
+      - name: Fazer o checkout do código 
+        # essa é a action que permite ter acesso ao código durante a execução do job.
+        uses: actions/checkout@v4
+        with:
+          ref: main # ref é o input que diz qual será o nome da branch que utilizaremos.
+      - name: "instalar Node.JS"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar as dependencias
+        run: npm ci
+      - name: Instalar angular CLI
+        run: npm install --global @angular/cli
+      - name: Build - Gerar o font de produção
+        run: ng build --configuration production --base-href=/proway-superDev-escola-ng/
+      - name: Salvar a pasta dist como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/ 
+  deploy:
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: Fazer o checkout do código 
+        # essa é a action que permite ter acesso ao código durante a execução do job.
+        uses: actions/checkout@v4
+        with:
+          ref: main # ref é o input que diz qual será o nome da branch que utilizaremos.
+      - name: Download do artefato
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: ./dist
+      - name: "Configurar Git"
         run: |
-         echo "Configurando o giti na pipeline"
-         echo "Configurando o giti na sucesso"
-      - name: "Configurando o user no git"
-        run: |
-          echo "Configurando o git user.name"
+          git config --global user.name "Tiago Bazzi Zancanella"
+          git config --global user.email "tiagozancanella17@gmail.com"
+          npm install --global angular-cli-ghpages
+      - name: Deploy to GitHub Pages
+        run: npx angular-cli-ghpages --dir=dist/escola-ng/browser --no-silent
+        env:
+          cli: true
+          GH_TOKEN: ${{secrets.TOKEN_TO_DEPLOY}}
+        
