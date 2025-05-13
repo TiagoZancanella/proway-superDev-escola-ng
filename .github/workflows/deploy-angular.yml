@@ -1,8 +1,10 @@
-name: "Workflow Exemplo"
+name: "Deploy Angular PROD"
 
 on:
   push:
-  workflow_dispatch:
+    branches:
+    - main
+  # workflow_dispatch:
 
 jobs:
   build:
@@ -36,7 +38,7 @@ jobs:
         # essa é a action que permite ter acesso ao código durante a execução do job.
         uses: actions/checkout@v4
         with:
-          ref: deploy # ref é o input que diz qual será o nome da branch que utilizaremos.
+          ref: main # ref é o input que diz qual será o nome da branch que utilizaremos.
       - name: Download do artefato
         uses: actions/download-artifact@v4
         with:
