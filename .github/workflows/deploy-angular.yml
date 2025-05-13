@@ -38,7 +38,7 @@ jobs:
         with:
           ref: deploy # ref é o input que diz qual será o nome da branch que utilizaremos.
       - name: Download do artefato
-        uses: actions/download-artifact@
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: ./dist
