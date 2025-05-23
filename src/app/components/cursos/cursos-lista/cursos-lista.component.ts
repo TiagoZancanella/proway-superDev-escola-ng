@@ -10,62 +10,55 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cursos-lista',
-  imports: [TableModule, CommonModule , ButtonModule, ToastModule, ConfirmDialogModule],
+  imports: [TableModule, CommonModule, ButtonModule, ToastModule, ConfirmDialogModule],
   templateUrl: './cursos-lista.component.html',
   styleUrl: './cursos-lista.component.css',
-  providers:[MessageService, ConfirmationService]
+  providers: [MessageService, ConfirmationService]
 })
 export class CursosListaComponent {
+  cursos: Array<Curso>;
 
-
-cursos : Array<Curso>;
-
-constructor(private router: Router,private confirmationService: ConfirmationService, private messageService: MessageService){
-this.cursos = [
-      new Curso(1,"Angular","ANG"),
-      new Curso(1,"CSS 3","CSS"),
-      new Curso(1,"Banco de Dados MYSQL","MSQ"),
+  constructor(private router: Router, private confirmationService: ConfirmationService, private messageService: MessageService) {
+    this.cursos = [
+      new Curso(1, "Angular", "ANG"),
+      new Curso(1, "CSS 3", "CSS"),
+      new Curso(1, "Banco de Dados MYSQL", "MSQ"),
     ]
-}
+  }
 
+  redirecionarPaginaCadastro() {
+    this.router.navigate(["/cursos/cadastro"])
+  }
 
-redirecionarPaginaCadastro(){
-  this.router.navigate(["/cursos/cadastro"])
-}
-
-
-
-
-    confirm1(event: Event) {
-        this.confirmationService.confirm({
-            target: event.target as EventTarget,
-            message: 'Deseja realemte apagar?',
-            header: 'Cuidado',
-            closable: true,
-            closeOnEscape: true,
-            icon: 'pi pi-exclamation-triangle',
-            rejectButtonProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true,
-            },
-            acceptButtonProps: {
-                label: 'Save',
-            },
-            accept: () => {
-                this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Pedido apagado' });
-            },
-            reject: () => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Cancelado',
-                    detail: 'Cancelado exclusão',
-                    life: 3000,
-                });
-            },
+  confirm1(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Deseja realmente apagar?',
+      header: 'CUIDADO',
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Save',
+      },
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rejected',
+          detail: 'You have rejected',
+          life: 3000,
         });
-    }
-
+      },
+    });
+  }
 
 
 }
