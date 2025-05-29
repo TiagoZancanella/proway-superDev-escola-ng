@@ -1,0 +1,19 @@
+<div class="flex flex-column gap gap-4">
+
+
+    <label for="campo-formacao">Nome</label>
+    <input pInputText id="campo-formacao" [(ngModel)]="formacao.nome" autocomplete="off" />
+
+    <div>
+        <label for="formacao-descricao">Descrição do curso: </label>
+        <textarea rows="5" id="formacao-descricao" cols="30" pTextarea [(ngModel)]="formacao.descricao"></textarea>
+    </div>
+    <div>
+        <label for="formacao-duracao">Duração do curso (horas):</label>
+        <input type="number" id="formacao-duracao"  min="1" step="1" required
+            [(ngModel)]="formacao.duracao">
+    </div>
+
+</div>
+
+<p-button label="Cadastrar" icon="pi pi-save" (click)="cadastrar()"></p-button>
