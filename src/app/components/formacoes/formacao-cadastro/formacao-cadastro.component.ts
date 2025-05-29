@@ -11,12 +11,12 @@ import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-formacao',
   imports: [FormsModule,InputTextModule, TextareaModule, ButtonModule],
-  templateUrl: './formacao.component.html',
+  templateUrl: './formacao-cadastro.component.html',
   standalone: true,
-  styleUrl: './formacao.component.css',
+  styleUrl: './formacao-cadastro.component.css',
   providers: [MessageService, FormacaoService]
 })
-export class FormacaoComponent {
+export class FormacaoCadastroComponent {
   formacao: Formacao = new Formacao();
 
   constructor(
