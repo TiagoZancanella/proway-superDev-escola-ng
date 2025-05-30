@@ -41,7 +41,7 @@ export class FormacaoListaComponent {
   }
 
   redirecionarPaginaCadastro() {
-    this.router.navigate(["/formacoes/formacao-cadastro"]);
+    this.router.navigate(["/formacoes/cadastro"]);
   }
 
   confirmarParaApagar(event: Event, id: number) {

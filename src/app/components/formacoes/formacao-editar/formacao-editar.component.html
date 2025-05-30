@@ -1,0 +1,13 @@
+<div class="flex flex-column gap gap-4">
+
+
+
+    <div>
+        <label for="formacao-descricao">Descrição do curso: </label>
+        <textarea rows="5" id="formacao-descricao" cols="30" pTextarea [(ngModel)]="formacao.descricao"></textarea>
+    </div>
+
+
+</div>
+
+<p-button label="Cadastrar" icon="pi pi-save" (click)="editar()"></p-button>
