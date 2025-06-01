@@ -1,0 +1,37 @@
+<p-card header="Cadastro">
+  <form (ngSubmit)="cadastrar()">
+    <div class="p-field">
+      <label for="campo-nome">Nome</label>
+      <input pInputText id="campo-nome" [(ngModel)]="professores.nome" name="nome" />
+    </div>
+
+    <div class="p-field">
+      <label for="campo-cnpj">CNPJ</label>
+      <input pInputText id="campo-cnpj" [(ngModel)]="professores.cnpj" name="cnpj" />
+    </div>
+
+    <div class="p-field">
+      <label for="campo-nome-fantasia">Nome Fantasia</label>
+      <input id="campo-nome-fantasia" pInputText [(ngModel)]="professores.nomeFantasia" name="nomeFantasia" />
+    </div>
+
+    <div class="p-field">
+      <label for="campo-chave-pix">Chave Pix</label>
+      <input id="campo-chave-pix" pInputText [(ngModel)]="professores.chavePix" name="chavePix" />
+    </div>
+
+    <div class="p-field">
+      <label for="campo-formacao">Formação</label>
+      <p-dropdown 
+        id="campo-formacao" 
+        [options]="formacoes" 
+        [(ngModel)]="professores.formacao" 
+        name="formacao"
+        placeholder="Selecione a formação"
+        class="w-full md:w-56">
+      </p-dropdown>
+    </div>
+
+    <button pButton type="submit" label="Salvar"></button>
+  </form>
+</p-card>
