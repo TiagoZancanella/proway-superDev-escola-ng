@@ -59,7 +59,7 @@ export class AlunosListaComponent implements OnInit {
     private alunoService: AlunoService,
   ) {
     this.alunos = []
-
+''
     this.alunoCadastro = new AlunoCadastro;
     let dataHoraAgora = new Date(Date.now());
 

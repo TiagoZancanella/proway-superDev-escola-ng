@@ -15,3 +15,16 @@ body {
     background: light-dark(var(--p-surface-0), var(--p-surface-950));
 }
 
+p-dropdown {
+margin: 10px;
+}
+
+
+.p-field {
+    margin:10px;
+    /* margin-left: 22px; */
+    /* text-align: ; */
+}   
+input, p-dropdown{
+    margin-left: 20px;
+}

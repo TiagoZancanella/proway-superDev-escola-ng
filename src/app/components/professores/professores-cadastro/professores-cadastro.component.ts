@@ -9,7 +9,6 @@ import { ProfessoresCadastro } from '../../../models/professores-cadastro';
 import { ProfessoresService } from '../../../services/professores.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-professores-cadastro',
@@ -21,9 +20,8 @@ import { Select } from 'primeng/select';
     DropdownModule,
     ButtonModule,
     CardModule,
-    Select
-  ],
-  providers: [MessageService],
+    ],
+  providers: [MessageService, ProfessoresService],
   templateUrl: './professores-cadastro.component.html',
   styleUrls: ['./professores-cadastro.component.css']
 })
