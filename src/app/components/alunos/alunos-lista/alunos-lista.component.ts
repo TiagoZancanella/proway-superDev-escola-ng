@@ -47,7 +47,7 @@ export class AlunosListaComponent implements OnInit {
   alunos: Aluno[];
   alunoCadastro: AlunoCadastro; // objeto que será utilizada na dialog(modal) para cadastrar
   dialogVisivelCadastarEditar: boolean = false;
-  dialogTituloCadastrarEditar?: string ;
+  dialogTituloCadastrarEditar?: string;
   idAlunoEditar?: number;
   carregandoAlunos: boolean = false;
   dataMaxima: Date;
@@ -59,23 +59,14 @@ export class AlunosListaComponent implements OnInit {
     private alunoService: AlunoService,
   ) {
     this.alunos = []
-''
+    ''
     this.alunoCadastro = new AlunoCadastro;
     let dataHoraAgora = new Date(Date.now());
 
-    
+
     this.dataMinima = new Date(1900, 0, 1);
-    this.dataMaxima = new Date(dataHoraAgora.getFullYear(), dataHoraAgora.getMonth(), dataHoraAgora.getDay(), 23, 59,59);
+    this.dataMaxima = new Date(dataHoraAgora.getFullYear(), dataHoraAgora.getMonth(), dataHoraAgora.getDay(), 23, 59, 59);
 
-
-
-
-
-
-
-
-
-    
   }
 
   ngOnInit(): void {
@@ -100,7 +91,7 @@ export class AlunosListaComponent implements OnInit {
 
   }
 
-  abrirModalEditar(aluno: Aluno){
+  abrirModalEditar(aluno: Aluno) {
     this.dialogTituloCadastrarEditar = `Editar Aluno - ${aluno.nome.toString()}`;
     this.alunoCadastro = new AlunoCadastro();
     this.alunoCadastro.nome = aluno.nome;
@@ -108,12 +99,12 @@ export class AlunosListaComponent implements OnInit {
     this.alunoCadastro.cpf = aluno.cpf;
     this.alunoCadastro.dataNascimento = new Date(aluno.dataNascimento!);
     this.idAlunoEditar = aluno.id;
-    
+
     this.dialogVisivelCadastarEditar = true;
 
   }
 
-  confirmarParaApagar(event: Event, alunoId : number) {
+  confirmarParaApagar(event: Event, alunoId: number) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Deseja realmente apagar?',
@@ -133,25 +124,26 @@ export class AlunosListaComponent implements OnInit {
       accept: () => this.apagar(alunoId)
     });
   }
-  private apagar(alunoId: number){
+  private apagar(alunoId: number) {
     this.alunoService.apagar(alunoId).subscribe({
-      next: () =>this.apresentarMensagemCadastrado(),
+      next: () => this.apresentarMensagemCadastrado(),
       error: erro => console.log("Ocorreu um erro ao apagar: " + erro),
     })
   }
 
-  private apresentarMensagemApagado(){
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Aluno removido com sucesso'});
+  private apresentarMensagemApagado() {
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Aluno removido com sucesso' });
     this.carregarAlunos();
   }
-  cadastrar(){
+  cadastrar() {
     this.alunoService.cadastrar(this.alunoCadastro).subscribe({
+      next: aluno => this.apresentarMensagemCadastrado(),
       error: erro => console.log("Ocorreu um erro ao cadastrar o aluno:" + erro),
     })
   }
 
 
-  apresentarMensagemCadastrado(){
+  apresentarMensagemCadastrado() {
     this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Aluno Cadastrado com Sucesso' });
     this.dialogVisivelCadastarEditar = false
     this.alunoCadastro = new AlunoCadastro();
@@ -161,22 +153,22 @@ export class AlunosListaComponent implements OnInit {
 
 
 
-  salvar(){
+  salvar() {
     if (this.idAlunoEditar === undefined)
       this.cadastrar();
     else
       this.editar();
   }
 
-  private editar(){
+  private editar() {
     this.alunoService.alterar(this.idAlunoEditar!, this.alunoCadastro).subscribe({
       next: aluno => this.apresentarMensagemEditado(),
       error: erro => console.log("Ocorreu um erro ao editar o aluno:" + erro),
     })
   }
 
-  private apresentarMensagemEditado(){
-    this.messageService.add({severity: 'sucesso', summary: 'Sucesso', detail: 'Aluno alterado com sucesso'});
+  private apresentarMensagemEditado() {
+    this.messageService.add({ severity: 'sucesso', summary: 'Sucesso', detail: 'Aluno alterado com sucesso' });
     this.dialogVisivelCadastarEditar = false
     this.idAlunoEditar = undefined;
     this.alunoCadastro = new AlunoCadastro();
