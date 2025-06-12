@@ -32,7 +32,7 @@
             <ng-template #body let-matricula>
                 <tr>
                     <td>{{ matricula.id }}</td>
-                    <td>{{ matricula.aluno.nome }}</td>py
+                    <td>{{ matricula.aluno.nome }}</td>
                     <td>{{ matricula.dataMatricula }}</td>
                     <td>
                         <!-- <p-button label="Editar" (click)="redirecionarEditar(matricula.id)" severity="warn"
@@ -45,3 +45,33 @@
         </p-table>
     </div>
 </div>
+
+
+<p-dialog header="Matricular Aluno" [modal]="true" [(visible)]="modalCadastrarVisible" [style]="{ width: '25rem' }">
+
+    <div class="flex items-center gap-4 mb-2">
+        <label for="campo-aluno" class="font-semibold flex-auto">Aluno</label>
+        <!-- <div class="card flex justify-center"> -->
+            <p-select
+             [options]="alunos" 
+             [(ngModel)]="matriculaCadastrar.alunoId"
+             [filter]="true"
+             filterBy="nomeCompleto"
+             appendTo="body"
+             optionLabel="nomeCompleto" 
+             optionValue="id"
+             placeholder="Escolha o aluno" 
+             class="w-full md:w-56" />
+        <!-- </div> -->
+
+    </div>
+    <div class="flex justify-end justify-content-end gap-2">
+        <p-button label="Cancelar" severity="secondary" icon="pi pi-times" (click)="modalCadastrarVisible = false" />
+        <p-button label="Matricular" icon="pi pi-save" (click)="matricular()" />
+    </div>
+    <!-- options => é a lista de itens que o usuário poderá escolher
+    optionLabel é a propriedade que o usuário visualizará para escolher ( usuário escolher por nome)
+    optionValue é o valor que o usuário escolheu ( armazena o valor escolhido ID)
+ 
+-->
+</p-dialog>
