@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlunoCadastro } from '../models/aluno-cadastro';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Aluno } from '../models/aluno';
 
 @Injectable({
@@ -19,9 +19,13 @@ export class AlunoService {
     alunoCadastro);
    }
 
-  obterTodos(): Observable<Array<Aluno>>{
-    return this.http.get<Array<Aluno>>(this.urlApi);// consultar todos
+   obterTodos(filtro: string = ""): Observable<Array<Aluno>>{
+    let params = new HttpParams()
+      .set("filtro", filtro);
+    return this.http.get<Array<Aluno>>(this.urlApi, {params}); // consultar todos
   }
+
+
   apagar(id: number): Observable<any>{
   return this.http.delete<any>(`${this.urlApi}/${id}`);
   }

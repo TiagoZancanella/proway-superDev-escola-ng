@@ -5,14 +5,27 @@
     <p-button label="Novo Aluno" icon="pi pi-plus" (click)="abrirModalCadastrar()"></p-button>
 </div>
 
-<p-table [value]="alunos" 
-    [paginator]="true"
-    [loading]="carregandoAlunos"
-    [rows]="40"
-    [rowsPerPageOptions]="[5, 10, 20, 40]"
-    showGridlines 
-    stripedRows 
-    [tableStyle]="{ 'min-width': '50rem' }">
+<p-table [value]="alunos" [paginator]="true" [loading]="carregandoAlunos" [rows]="40"
+    [rowsPerPageOptions]="[5, 10, 20, 40]" showGridlines stripedRows [tableStyle]="{ 'min-width': '50rem' }">
+
+
+
+    <ng-template #caption>
+        <div class="flex justify-content-end flex-wrap">
+
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input type="text" pInputText placeholder="Buscar por nome ou cpf"
+                    (keydown.enter)="realizarBuscaFiltrando()" [(ngModel)]="pesquisa" />
+                @if(buscandoRegistros == true){
+                <p-inputicon styleClass="pi pi-spinner pi-spin" />
+                }
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+
+
     <ng-template #header>
         <tr>
             <th>Código</th>
@@ -29,14 +42,17 @@
             <td>{{ aluno.cpf | formatarCpf}}</td>
             <td>{{ aluno.dataNascimento | dataHoraCustomizada }}</td>
             <td>
-                <p-button label="Editar" severity="warn"(click)="abrirModalEditar(aluno)" class="mr-2" icon="pi pi-pencil"></p-button>
-                <p-button label="Apagar" outlined="true" (click)="confirmarParaApagar($event, aluno.id)" severity="danger" icon="pi pi-trash"></p-button>
+                <p-button label="Editar" severity="warn" (click)="abrirModalEditar(aluno)" class="mr-2"
+                    icon="pi pi-pencil"></p-button>
+                <p-button label="Apagar" outlined="true" (click)="confirmarParaApagar($event, aluno.id)"
+                    severity="danger" icon="pi pi-trash"></p-button>
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog [header]="dialogTituloCadastrarEditar" [modal]="true" [(visible)]="dialogVisivelCadastarEditar" [style]="{ width: '25rem' }">
+<p-dialog [header]="dialogTituloCadastrarEditar" [modal]="true" [(visible)]="dialogVisivelCadastarEditar"
+    [style]="{ width: '25rem' }">
 
     <div class="flex items-center gap-4 mb-2">
         <label for="campo-nome" class="font-semibold flex-auto">Nome</label>
@@ -45,26 +61,24 @@
 
     <div class="flex items-center gap-4 mb-2">
         <label for="campo-sobrenome" class="font-semibold flex-auto">Sobrenome</label>
-        <input pInputText id="campo-sobrenome" class="flex-auto" autocomplete="off" [(ngModel)]="alunoCadastro.sobrenome" />
+        <input pInputText id="campo-sobrenome" class="flex-auto" autocomplete="off"
+            [(ngModel)]="alunoCadastro.sobrenome" />
     </div>
-    
+
     <div class="flex items-center gap-4 mb-2">
         <label for="campo-cpf" class="font-semibold flex-auto">CPF</label>
-        <p-inputmask mask="999.999.999-99" [(ngModel)]="alunoCadastro.cpf" placeholder="000.000.000-00"/>
+        <p-inputmask mask="999.999.999-99" [(ngModel)]="alunoCadastro.cpf" placeholder="000.000.000-00" />
     </div>
-    
+
     <div class="flex items-center gap-4 mb-2">
         <label for="campo-data-nascimento" class="font-semibold flex-auto">Data de Nascimento</label>
-         <p-datepicker [(ngModel)]="alunoCadastro.dataNascimento" 
-         dateFormat="dd/mm/yy"
-         appendTo="body"
-         [minDate]="dataMinima"
-         [maxDate]="dataMaxima" 
-         [showIcon]="true"/>
+        <p-datepicker [(ngModel)]="alunoCadastro.dataNascimento" dateFormat="dd/mm/yy" appendTo="body"
+            [minDate]="dataMinima" [maxDate]="dataMaxima" [showIcon]="true" />
     </div>
 
     <div class="flex justify-end justify-content-end gap-2">
-        <p-button label="Cancelar" severity="secondary" icon="pi pi-times" (click)="dialogVisivelCadastarEditar = false" />
+        <p-button label="Cancelar" severity="secondary" icon="pi pi-times"
+            (click)="dialogVisivelCadastarEditar = false" />
         <p-button label="Salvar" icon="pi pi-save" (click)="salvar()" />
     </div>
 

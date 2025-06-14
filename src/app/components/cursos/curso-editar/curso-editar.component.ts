@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CursoEditar } from '../../../models/curso-editar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CursoService } from '../../../services/curso.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -17,6 +17,9 @@ import { AlunoSelect } from '../../../models/aluno';
 import { SelectModule } from 'primeng/select';
 import { AlunoService } from '../../../services/aluno.service';
 import { MatriculaService } from '../../../services/matricula.service';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { DataHoraCustomizadaPipe } from "../../../pipes/data-hora-customizada.pipe";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-curso-editar',
@@ -29,9 +32,11 @@ import { MatriculaService } from '../../../services/matricula.service';
     ToastModule,
     TableModule,
     DialogModule,
-    SelectModule
-  ],
-  providers: [MessageService],
+    SelectModule,
+    ConfirmDialog,
+    DataHoraCustomizadaPipe
+],
+  providers: [MessageService, MatriculaService, DataHoraCustomizadaPipe,ConfirmationService, DatePipe],
   templateUrl: './curso-editar.component.html',
   styleUrl: './curso-editar.component.css'
 })
@@ -46,6 +51,7 @@ export class CursoEditarComponent {
 
   constructor(
     private matriculaService: MatriculaService,
+    private confirmationService: ConfirmationService,
     private router: Router,
     private cursoService: CursoService,
     private messageService: MessageService,
@@ -66,7 +72,7 @@ export class CursoEditarComponent {
       next: curso => this.preencherCamposParaEditar(curso),
       error: erro => console.log("Ocorreu um erro ao carregar dados do curso:" + erro),
     });
-  this.carregarMatriculas();
+    this.carregarMatriculas();
   }
 
   redirecionarEditar(IdCurso: number) {
@@ -110,8 +116,40 @@ export class CursoEditarComponent {
     this.modalCadastrarVisible = true
   }
   matricular() {
-
+    this.matriculaCadastrar.cursoId = this.idEditar;
+    this.matriculaService.cadastrar(this.matriculaCadastrar).subscribe({
+      next: matricula => this.finalizarCadastrarMatricula(matricula),
+      error: erro => this.apresentarMensagemErroCadastrarMatricula(erro)
+    })
   }
+
+  finalizarCadastrarMatricula(matricula: Matricula) {
+    this.apresentarMensagemMatriculaCadastradaComSucesso(matricula)
+    this.limparModalMatricula();
+    this.carregarMatriculas();
+    this.modalCadastrarVisible = false
+  }
+
+
+  limparModalMatricula() {
+    this.matriculaCadastrar = new MatriculaCadastar();
+  }
+
+  apresentarMensagemErroCadastrarMatricula(error: any) {
+    this.messageService.add({ detail: "Erro ao cadastar matricula", severity: "error" });
+    console.error(error);
+  }
+
+
+
+  apresentarMensagemMatriculaCadastradaComSucesso(matricula: Matricula) {
+    this.messageService.add({
+      detail: `Marticula cadastrado com sucesso para o aluno '${matricula.aluno.nome}'`,
+      severity: "sucess"
+    })
+  }
+
+
 
   private carregarAlunos() {
     this.alunoService.obterTodos().subscribe({
@@ -136,5 +174,61 @@ export class CursoEditarComponent {
     this.messageService.add({ detail: "Erro ao carregar as matriculas", severity: "error" });
     console.error(error);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  confirmarParaApagar(event: Event, matriculaId: number) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Deseja realmente apagar?',
+      header: 'CUIDADO',
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Deletar',
+        severity: 'danger',
+      },
+      accept: () => this.apagarMatricula(matriculaId)
+    });
+  }
+  private apagarMatricula(matriculaId: number) {
+    this.matriculaService.apagar(matriculaId).subscribe({
+      next: () => this.finalizarMatriculaApagada(),
+      error: erro => console.log("Ocorreu um erro ao apagar: " + erro),
+    })
+  }
+
+
+  private finalizarMatriculaApagada(): void {
+    this.apresentarMensagemMatriculaApagado();
+    this.carregarMatriculas();
+  }
+
+  private apresentarMensagemMatriculaApagado() {
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Matricula removida com sucesso' });
+    this.carregarAlunos();
+  }
+
+
+
 
 }

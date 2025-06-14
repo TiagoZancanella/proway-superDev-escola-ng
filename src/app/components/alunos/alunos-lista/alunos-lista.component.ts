@@ -16,6 +16,8 @@ import { AlunoCadastro } from '../../../models/aluno-cadastro';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DatePickerModule } from 'primeng/datepicker';
 import { AlunoService } from '../../../services/aluno.service';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-alunos-lista',
@@ -31,6 +33,9 @@ import { AlunoService } from '../../../services/aluno.service';
     ToastModule,
     InputMaskModule,
     DatePickerModule,
+    IconFieldModule,
+    InputIconModule,
+
   ],
   templateUrl: './alunos-lista.component.html',
   styleUrl: './alunos-lista.component.css',
@@ -52,6 +57,8 @@ export class AlunosListaComponent implements OnInit {
   carregandoAlunos: boolean = false;
   dataMaxima: Date;
   dataMinima: Date;
+  buscandoRegistros: boolean = false;
+  pesquisa: string = "";
 
 
   constructor(
@@ -73,15 +80,35 @@ export class AlunosListaComponent implements OnInit {
     this.carregarAlunos();
   }
 
+
+
+  realizarBuscaFiltrando() {
+    this.buscandoRegistros = true;
+    this.carregarAlunos();
+  }
+
   private carregarAlunos() {
     this.carregandoAlunos = true;
-    // fazer a requisição para o back-end
-    this.alunoService.obterTodos().subscribe({
+    // Fazer a requisição para o back-end
+    this.alunoService.obterTodos(this.pesquisa).subscribe({
       next: alunos => this.alunos = alunos,
       error: erro => console.log("Ocorreu um erro ao carregar a lista de alunos:" + erro),
-      complete: () => this.carregandoAlunos = false
+      complete: () => {
+        this.carregandoAlunos = false
+        this.buscandoRegistros = false;
+      }
     });
   }
+
+  // private carregarAlunos() {
+  //   this.carregandoAlunos = true;
+  //   // fazer a requisição para o back-end
+  //   this.alunoService.obterTodos().subscribe({
+  //     next: alunos => this.alunos = alunos,
+  //     error: erro => console.log("Ocorreu um erro ao carregar a lista de alunos:" + erro),
+  //     complete: () => this.carregandoAlunos = false
+  //   });
+  // }
 
   abrirModalCadastrar() {
     this.dialogTituloCadastrarEditar = "Cadastro de aluno";
